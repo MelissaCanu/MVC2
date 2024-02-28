@@ -1,0 +1,90 @@
+﻿@model IEnumerable<U2S2E3.Models.Prodotto>
+    @using U2S2E3.Models
+
+@{
+    ViewBag.Title = "IndexAdmin";
+}
+
+<style>
+    td {
+        max-width: 200px; 
+    }
+    textarea {
+        height: 100%;
+        overflow: auto;
+    }
+</style>
+
+<h2>Sezione Admin</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.IDArticolo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Prezzo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descrizione)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImgCopertina)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImgAggiuntiva1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImgAggiuntiva2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InVetrina)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.IDArticolo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Prezzo)
+        </td>
+        <td>
+            <textarea readonly>@Html.DisplayFor(modelItem => item.Descrizione)</textarea>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ImgCopertina)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ImgAggiuntiva1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ImgAggiuntiva2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InVetrina)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.IDArticolo }) |
+            <!--se l'elemento è in vetrina mostro il bottone nascondi da vetrina, altrimenti aggiungi a vetrina'-->
+            @if (item.InVetrina)
+            {
+                @Html.ActionLink("Nascondi da Vetrina", "TogliDaVetrina", new { id = item.IDArticolo }, new { @class = "btn btn-sm btn-danger btn-outline-dark" })
+            }
+            else
+            {
+                @Html.ActionLink("Aggiungi a Vetrina", "AddToVetrina", new { id = item.IDArticolo }, new { @class = "btn btn-sm btn-success btn-outline-dark" })
+            }
+        </td>
+    </tr>
+}
+
+</table>

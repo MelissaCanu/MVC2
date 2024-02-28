@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using U2S2E3.Models; // AGGIUNGI QUESTA LINEAAAAAAAHHHH !!! 
+﻿// AGGIUNGI QUESTA LINEAAAAAAAHHHH !!! 
 
 //********* Aggiungo [HttpPost] alle azioni per indicare che dovrebbero essere invocate
 //solo in risposta a una richiesta POST.
@@ -12,37 +7,55 @@ using U2S2E3.Models; // AGGIUNGI QUESTA LINEAAAAAAAHHHH !!!
 //per accettare un'istanza del modello Utente.
 
 
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using U2S2E3.Models;
+
 namespace U2S2E3.Controllers
 {
-   
     public class AccountController : Controller
     {
-        private List<Utente> utenti = new List<Utente>();
         // GET: Login
         public ActionResult Login()
         {
             return View();
         }
 
-        //verifico se utente è admin o utente normale e apro la sessione
         [HttpPost]
         public ActionResult Login(Utente utente)
         {
+            // Verifica se il modello è valido
             if (ModelState.IsValid)
             {
-                if (utente.Username == "admin" && utente.Password == "admin")
+                // Mi connetto al db con uno using per evitare di lasciare la connessione aperta
+                string connectionString = ConfigurationManager.ConnectionStrings["MyDB"].ConnectionString.ToString();
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    utente.Ruolo = "Admin";
-                    Session["Utente"] = utente;
-                    return RedirectToAction("Index", "Home");
-                }
-
-                foreach (var u in utenti)
-                {
-                    if (u.Username == utente.Username && u.Password == utente.Password)
+                    // Query
+                    string query = "SELECT * FROM Utenti WHERE Username = @Username AND Password = @Password";
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        Session["Utente"] = u;
-                        return RedirectToAction("Index", "Home");
+                        command.Parameters.AddWithValue("@Username", utente.Username);
+                        command.Parameters.AddWithValue("@Password", utente.Password);
+                        connection.Open();
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            // HasRows è un metodo che restituisce true se il reader contiene una o più righe
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    utente.Ruolo = reader["Ruolo"].ToString();
+                                }
+                                Session["Utente"] = utente;
+                                return RedirectToAction("Index", "Home");
+                            }
+                        }
                     }
                 }
             }
@@ -60,25 +73,47 @@ namespace U2S2E3.Controllers
         [HttpPost]
         public ActionResult Register(Utente utente)
         {
+            // Verifica se il modello è valido
             if (ModelState.IsValid)
             {
-                foreach (var u in utenti)
+                // Mi connetto al db con uno using per evitare di lasciare la connessione aperta
+                string connectionString = ConfigurationManager.ConnectionStrings["MyDB"].ConnectionString.ToString();
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    if (u.Username == utente.Username)
+                    // Query
+                    string query = "SELECT * FROM Utenti WHERE Username = @Username";
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        ViewBag.Error = "Username già esistente. Scegli un altro username.";
-                        return View(utente);
+                        command.Parameters.AddWithValue("@Username", utente.Username);
+                        connection.Open();
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            // HasRows è un metodo che restituisce true se il reader contiene una o più righe
+                            if (reader.HasRows)
+                            {
+                                ViewBag.Error = "Username già esistente. Scegli un altro username.";
+                                return View(utente);
+                            }
+                        }
+                    }
+
+                    // Se il modello è valido, inserisco l'utente nel db
+                    query = "INSERT INTO Utenti (Username, Password, Ruolo) VALUES (@Username, @Password, @Ruolo)";
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Username", utente.Username);
+                        command.Parameters.AddWithValue("@Password", utente.Password);
+                        command.Parameters.AddWithValue("@Ruolo", "Utente");
+                        command.ExecuteNonQuery();
                     }
                 }
-
-                utente.Ruolo = "Utente";
-                utenti.Add(utente);
 
                 return RedirectToAction("Login");
             }
 
-            // Se il modello non è valido, restituisci la vista di registrazione con il modello
+            // Se il modello non è valido, restituisco la vista di registrazione con il modello
             return View(utente);
         }
     }
 }
+
