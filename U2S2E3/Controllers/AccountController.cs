@@ -18,6 +18,11 @@ namespace U2S2E3.Controllers
     public class AccountController : Controller
     {
         private List<Utente> utenti = new List<Utente>();
+        // GET: Login
+        public ActionResult Login()
+        {
+            return View();
+        }
 
         //verifico se utente è admin o utente normale e apro la sessione
         [HttpPost]
@@ -44,6 +49,12 @@ namespace U2S2E3.Controllers
 
             // Se il modello non è valido o se non viene trovato nessun utente, reindirizza alla registrazione
             return RedirectToAction("Register");
+        }
+
+        // GET: Register
+        public ActionResult Register()
+        {
+            return View();
         }
 
         [HttpPost]

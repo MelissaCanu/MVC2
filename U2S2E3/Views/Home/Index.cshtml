@@ -7,9 +7,17 @@
 
 @using U2S2E3.Models
 
-<h2>Benvenut*, @((Utente)Session["Utente"]).Username!</h2>
+@{
+    var utente = Session["Utente"] as U2S2E3.Models.Utente;
+    if (utente != null)
+    {
+        <p>Benvenuto, @utente.Username!</p>
+    }
+}
 
 <h2 style="color:black; text-align:center; font-size:2.5em; font-weight:bold;">Scarpe & Co</h2>
+@Html.ActionLink("Login", "Login", "Account")
+@Html.ActionLink("Register", "Register", "Account")
 
 <div class="container">
     <div class="row">
