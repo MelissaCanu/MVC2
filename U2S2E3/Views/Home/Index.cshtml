@@ -1,0 +1,33 @@
+﻿
+@model List<U2S2E3.Models.Prodotto>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@using U2S2E3.Models
+
+<h2>Benvenut*, @((Utente)Session["Utente"]).Username!</h2>
+
+<h2 style="color:black; text-align:center; font-size:2.5em; font-weight:bold;">Scarpe & Co</h2>
+
+<div class="container">
+    <div class="row">
+        @foreach (var prodotto in Model)
+        {
+            <div class="col-sm-4 my-2">
+                <div class="card shadow text-white">
+                    <img class="card-img-top" src="@prodotto.ImgCopertina" alt="Immagine di copertina per @prodotto.Nome" />
+                    <div class="card-body bg-dark">
+                        <h5 class="card-title">@prodotto.Nome</h5>
+
+                        <p class="card-text">Prezzo: @prodotto.Prezzo</p>
+                        <a href="@Url.Action("Dettagli", "Prodotti", new { id = prodotto.IDArticolo })" class="btn btn-dark btn-outline-light fw-bold">Visualizza dettagli</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+

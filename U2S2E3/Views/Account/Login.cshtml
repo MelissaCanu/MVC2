@@ -1,0 +1,17 @@
+﻿@model U2S2E3.Models.Utente
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+<form action="/Account/Login" method="post">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username">
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password">
+
+    <input type="submit" value="Login">
+</form>
