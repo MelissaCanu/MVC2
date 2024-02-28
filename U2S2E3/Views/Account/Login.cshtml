@@ -6,12 +6,20 @@
 
 <h2>Login</h2>
 
-<form action="/Account/Login" method="post">
+<!-- Come in Register, utilizzo di Helper -->
+
+@using (Html.BeginForm("Login", "Account", FormMethod.Post))
+{
+
     <label for="username">Username:</label>
-    <input type="text" id="username" name="username">
+    @Html.TextBoxFor(model => model.Username)
+    @Html.ValidationMessageFor(model => model.Username)
 
     <label for="password">Password:</label>
-    <input type="password" id="password" name="password">
+    @Html.PasswordFor(model => model.Password)
+    @Html.ValidationMessageFor(model => model.Password)
 
     <input type="submit" value="Login">
-</form>
+}
+
+@Html.ValidationSummary()

@@ -7,8 +7,15 @@
 <h2>Register</h2>
 
 <!--uso beginform per creare un form che invia i dati al metodo Register del controller Account-->
+
+<!--formmethod.post serve per inviare i dati al server-->
+
 @using (Html.BeginForm("Register", "Account", FormMethod.Post))
-{
+{   
+    <!-->creo label per username e password con TextBoxFor che serve per creare un input di tipo text
+    e ValidationMessageFor per mostrare eventuali errori-->
+
+    <!--model => model.Username serve per associare il campo username al modello Utente -->
     <label for="username">Username:</label>
     @Html.TextBoxFor(model => model.Username)
     @Html.ValidationMessageFor(model => model.Username)
@@ -20,4 +27,5 @@
     <input type="submit" value="Register">
 }
 
+<!--ValidationSummary serve per mostrare eventuali errori di validazione -->
 @Html.ValidationSummary()

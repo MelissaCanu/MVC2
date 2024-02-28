@@ -5,51 +5,69 @@ using System.Web;
 using System.Web.Mvc;
 using U2S2E3.Models; // AGGIUNGI QUESTA LINEAAAAAAAHHHH !!! 
 
+//********* Aggiungo [HttpPost] alle azioni per indicare che dovrebbero essere invocate
+//solo in risposta a una richiesta POST.
+
+//Aggiungo un parametro Utente utente a ciascuna azione
+//per accettare un'istanza del modello Utente.
+
+
 namespace U2S2E3.Controllers
 {
-    //creato controller per gestire login utente normale o admin
+   
     public class AccountController : Controller
     {
         private List<Utente> utenti = new List<Utente>();
 
-        // GET: verifico se utente è admin o utente normale e apro la sessione
-        public ActionResult Login(string username, string password)
+        //verifico se utente è admin o utente normale e apro la sessione
+        [HttpPost]
+        public ActionResult Login(Utente utente)
         {
-            if (username == "admin" && password == "admin")
+            if (ModelState.IsValid)
             {
-                Utente admin = new Utente();
-                admin.Username = username;
-                admin.Password = password;
-                admin.Ruolo = "Admin";
-
-                Session["Utente"] = admin;
-                return RedirectToAction("Index", "Home");
-            }
-            //foreach per verificare se utente è presente nella lista utenti
-            foreach (var utente in utenti)
-            {
-                if (utente.Username == username && utente.Password == password)
+                if (utente.Username == "admin" && utente.Password == "admin")
                 {
+                    utente.Ruolo = "Admin";
                     Session["Utente"] = utente;
                     return RedirectToAction("Index", "Home");
                 }
-            }
-            return RedirectToAction("Register");
 
-           //non ho bisogno di view perché reindirizzo l'utente a una nuova pagina
+                foreach (var u in utenti)
+                {
+                    if (u.Username == utente.Username && u.Password == utente.Password)
+                    {
+                        Session["Utente"] = u;
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+            }
+
+            // Se il modello non è valido o se non viene trovato nessun utente, reindirizza alla registrazione
+            return RedirectToAction("Register");
         }
 
-            //creo metodo per registrazione utente e aggiungo utente alla lista utenti
-            public ActionResult Register(string username, string password)
+        [HttpPost]
+        public ActionResult Register(Utente utente)
         {
-            Utente nuovoUtente = new Utente();
-            nuovoUtente.Username = username;
-            nuovoUtente.Password = password;
-            nuovoUtente.Ruolo = "Utente";
+            if (ModelState.IsValid)
+            {
+                foreach (var u in utenti)
+                {
+                    if (u.Username == utente.Username)
+                    {
+                        ViewBag.Error = "Username già esistente. Scegli un altro username.";
+                        return View(utente);
+                    }
+                }
 
-            utenti.Add(nuovoUtente);
+                utente.Ruolo = "Utente";
+                utenti.Add(utente);
 
-            return RedirectToAction("Login");
+                return RedirectToAction("Login");
+            }
+
+            // Se il modello non è valido, restituisci la vista di registrazione con il modello
+            return View(utente);
         }
     }
 }
