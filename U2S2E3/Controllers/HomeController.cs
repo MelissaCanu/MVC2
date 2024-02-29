@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -75,7 +76,7 @@ namespace U2S2E3.Controllers
             }
         }
 
-   
+
         //GET: DETTAGLI 
         public ActionResult Dettagli(int id)
         {
@@ -121,11 +122,11 @@ namespace U2S2E3.Controllers
         }
 
 
-    //*** NEI MIEI METODI PER LA GESTIONE DEI PRODOTTI DA ADMIN ->
-    // USO IL METODO POST PERCHE' MODIFICO IL DB, OVVERO LO STATO DEI PRODOTTI ***  
+        //*** NEI MIEI METODI PER LA GESTIONE DEI PRODOTTI DA ADMIN ->
+        // USO IL METODO POST PERCHE' MODIFICO IL DB, OVVERO LO STATO DEI PRODOTTI ***  
 
-    // GET: TogliDaVetrina con parametro id 
-    [HttpPost]
+        // GET: TogliDaVetrina con parametro id 
+        [HttpPost]
         public ActionResult TogliDaVetrina(int id)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["MyDB"].ConnectionString.ToString();
@@ -185,9 +186,77 @@ namespace U2S2E3.Controllers
         }
 
 
+        //******* CREATE *******
+        // GET: Create
 
+        public ActionResult Create()
+        {
+            Utente utenteLoggato = Session["Utente"] as Utente;
 
+            if (utenteLoggato != null && utenteLoggato.Ruolo == "Admin")
+            {
+                // L'utente è un admin, quindi restituisco la vista Create
+                return View();
+            }
+            else
+            {
+                // L'utente non è un admin, quindi reindirizzo alla pagina di login o a un'altra pagina appropriata
+                return RedirectToAction("Index");
+            }
+        }
+
+        // POST: Create
+        [HttpPost]
+
+        //action per creare un nuovo prodotto
+        //aggiungo il parametro file di tipo HttpPostedFileBase per caricare l'immagine
+
+        public ActionResult Create(Prodotto prodotto, HttpPostedFileBase file)
+        {
+            Utente utenteLoggato = Session["Utente"] as Utente;
+
+            if (utenteLoggato != null && utenteLoggato.Ruolo == "Admin")
+            {
+                if (ModelState.IsValid)
+                {
+
+                    //se il file è diverso da null e ha una lunghezza maggiore di 0
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        //salvo il file nella cartella img
+                        var fileName = Path.GetFileName(file.FileName);
+                        var path = Path.Combine(Server.MapPath("~/Content/img"), fileName);
+                        file.SaveAs(path);
+                        //aggiungo il nome del file al campo ImgCopertina del prodotto
+                        prodotto.ImgCopertina = "~/Content/img/" + fileName;
+
+                        //mi connetto al db
+                        string connectionString = ConfigurationManager.ConnectionStrings["MyDB"].ConnectionString.ToString();
+                        using (SqlConnection connection = new SqlConnection(connectionString))
+                        {
+                            //query per inserire i dati del prodotto nel db
+                            string query = "INSERT INTO Prodotti (Nome, Prezzo, Descrizione, ImgCopertina, InVetrina) VALUES (@Nome, @Prezzo, @Descrizione, @ImgCopertina, @InVetrina)";
+                            using (SqlCommand command = new SqlCommand(query, connection))
+                            {
+                                command.Parameters.AddWithValue("@Nome", prodotto.Nome);
+                                command.Parameters.AddWithValue("@Prezzo", prodotto.Prezzo);
+                                command.Parameters.AddWithValue("@Descrizione", prodotto.Descrizione);
+                                command.Parameters.AddWithValue("@ImgCopertina", prodotto.ImgCopertina);
+                                command.Parameters.AddWithValue("@InVetrina", prodotto.InVetrina);
+                                connection.Open();
+                                command.ExecuteNonQuery();
+                            }
+                        }
+                        return RedirectToAction("Index");
+                    }
+                }
+            }
+            return View(prodotto);
+        }
     }
 }
+
+
+    
 
 

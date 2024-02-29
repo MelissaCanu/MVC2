@@ -182,9 +182,11 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Home\IndexAdmin.cshtml" />
     <Content Include="Views\Home\Dettagli.cshtml" />
+    <Content Include="Views\Home\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\img\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

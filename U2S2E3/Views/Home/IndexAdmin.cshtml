@@ -91,7 +91,7 @@
                     @Html.DisplayFor(modelItem => item.InVetrina)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.IDArticolo }) |
+                    @Html.ActionLink("Create", "Create") |
                     <!--se l'elemento è in vetrina mostro il bottone nascondi da vetrina, altrimenti aggiungi a vetrina-->
                     @if (item.InVetrina)
                     {
@@ -114,7 +114,7 @@
     </table>
     </div>
 
-<!--rimozione tempdata dopo 10 secondi-->
+<!--rimozione tempdata dopo 5 secondi-->
 <script>
     
     setTimeout(function () {
