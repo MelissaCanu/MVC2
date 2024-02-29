@@ -67,6 +67,7 @@ namespace U2S2E3.Controllers
             else
             {
                 // L'utente non è un admin, quindi restituisco la vista standard
+
                 //espressione "lambda" utilizzata per filtrare una lista di oggetti in C#:
                 //prendo prodotto p e restituisco il valore del campo InVetrina -> se è true lo aggiungo alla lista
                 prodotti = prodotti.Where(p => p.InVetrina).ToList();

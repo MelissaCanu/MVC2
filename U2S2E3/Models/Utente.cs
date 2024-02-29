@@ -9,9 +9,10 @@ namespace U2S2E3.Models
     public class Utente
     {
         public int IDUtente { get; set; }
-        [Required]
+        
+        [Required(ErrorMessage = "Inserisci un username")]
         public string Username { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Inserisci una password")]
         public string Password { get; set; }
         public string Ruolo { get; set; }
     }

@@ -19,10 +19,10 @@
 <div class="container">
     @if (TempData["Message"] != null)
     {
-        <div class="alert alert-success" role="alert">
+        <div id="successMessage" class="alert alert-success" role="alert">
             @TempData["Message"]
         </div>
-        
+        //lo rimuovo dopo 10 secondi aggiungendo js
         TempData.Remove("Message");
     }
 
@@ -113,3 +113,14 @@
 
     </table>
     </div>
+
+<!--rimozione tempdata dopo 10 secondi-->
+<script>
+    
+    setTimeout(function () {
+        var successMessage = document.getElementById('successMessage');
+        if (successMessage) {
+            successMessage.remove();
+        }
+    }, 5000); 
+</script>

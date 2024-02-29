@@ -6,6 +6,15 @@
 
 <h2>Registrati</h2>
 
+<!--QUA METTO IL VIEWBAG.ERROR-->
+@if (!String.IsNullOrEmpty(ViewBag.Error))
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+
 <!--uso beginform per creare un form che invia i dati al metodo Register del controller Account-->
 <!--formmethod.post serve per inviare i dati al server-->
 
