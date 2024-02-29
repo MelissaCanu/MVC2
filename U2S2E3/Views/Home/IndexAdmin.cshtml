@@ -74,14 +74,20 @@
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id = item.IDArticolo }) |
-            <!--se l'elemento è in vetrina mostro il bottone nascondi da vetrina, altrimenti aggiungi a vetrina'-->
+            <!--se l'elemento è in vetrina mostro il bottone nascondi da vetrina, altrimenti aggiungi a vetrina-->
             @if (item.InVetrina)
             {
-                @Html.ActionLink("Nascondi da Vetrina", "TogliDaVetrina", new { id = item.IDArticolo }, new { @class = "btn btn-sm btn-danger btn-outline-dark" })
+                using (Html.BeginForm("TogliDaVetrina", "Home", new { id = item.IDArticolo }, FormMethod.Post, new { @class = "d-inline" }))
+                {
+                    <input type="submit" value="Nascondi da Vetrina" class="btn btn-sm btn-danger btn-outline-dark" />
+                }
             }
             else
             {
-                @Html.ActionLink("Aggiungi a Vetrina", "AddToVetrina", new { id = item.IDArticolo }, new { @class = "btn btn-sm btn-success btn-outline-dark" })
+                using (Html.BeginForm("AddToVetrina", "Home", new { id = item.IDArticolo }, FormMethod.Post, new { @class = "d-inline" }))
+                {
+                    <input type="submit" value="Aggiungi a Vetrina" class="btn btn-sm btn-success btn-outline-dark" />
+                }
             }
         </td>
     </tr>
