@@ -149,7 +149,8 @@ namespace U2S2E3.Controllers
                     command.ExecuteNonQuery();
                 }
             }
-            return RedirectToAction("IndexAdmin");
+            TempData["Message"] = "Prodotti nascosti dalla vetrina con successo.";
+            return RedirectToAction("Index");
         }
 
         // GET: AddToVetrina con parametro id
@@ -178,7 +179,8 @@ namespace U2S2E3.Controllers
                     command.ExecuteNonQuery();
                 }
             }
-            return RedirectToAction("IndexAdmin");
+            TempData["Message"] = "Prodotti aggiunti alla vetrina con successo.";
+            return RedirectToAction("Index"); //reindirizzo alla action index che porta alla view IndexAdmin
         }
 
 

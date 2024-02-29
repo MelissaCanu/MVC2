@@ -15,82 +15,101 @@
     }
 </style>
 
-<h2>Sezione Admin</h2>
+<!--USO TEMPDATA IN HOMECONTROLLER E QUA GESTISCO LA RIMOZIONE DEL MESSAGGIO DI SUCCESSO-->
+<div class="container">
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["Message"]
+        </div>
+        
+        TempData.Remove("Message");
+    }
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.IDArticolo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Nome)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Prezzo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Descrizione)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ImgCopertina)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ImgAggiuntiva1)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ImgAggiuntiva2)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.InVetrina)
-        </th>
-        <th></th>
-    </tr>
+    <h2>Sezione Admin</h2>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.IDArticolo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nome)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Prezzo)
-        </td>
-        <td>
-            <textarea readonly>@Html.DisplayFor(modelItem => item.Descrizione)</textarea>
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ImgCopertina)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ImgAggiuntiva1)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ImgAggiuntiva2)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.InVetrina)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.IDArticolo }) |
-            <!--se l'elemento è in vetrina mostro il bottone nascondi da vetrina, altrimenti aggiungi a vetrina-->
-            @if (item.InVetrina)
-            {
-                using (Html.BeginForm("TogliDaVetrina", "Home", new { id = item.IDArticolo }, FormMethod.Post, new { @class = "d-inline" }))
-                {
-                    <input type="submit" value="Nascondi da Vetrina" class="btn btn-sm btn-danger btn-outline-dark" />
-                }
-            }
-            else
-            {
-                using (Html.BeginForm("AddToVetrina", "Home", new { id = item.IDArticolo }, FormMethod.Post, new { @class = "d-inline" }))
-                {
-                    <input type="submit" value="Aggiungi a Vetrina" class="btn btn-sm btn-success btn-outline-dark" />
-                }
-            }
-        </td>
-    </tr>
-}
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IDArticolo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prezzo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descrizione)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImgCopertina)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImgAggiuntiva1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImgAggiuntiva2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InVetrina)
+            </th>
+            <th></th>
+        </tr>
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IDArticolo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Prezzo)
+                </td>
+                <td>
+                    <textarea readonly>@Html.DisplayFor(modelItem => item.Descrizione)</textarea>
+                </td>
+                <td>
+                    <div class="text-truncate d-inline-block" style="max-width: 200px;">
+                        @Html.DisplayFor(modelItem => item.ImgCopertina)
+                    </div>
+                </td>
+                <td>
+                    <div class="text-truncate d-inline-block" style="max-width: 200px;">
+                        @Html.DisplayFor(modelItem => item.ImgAggiuntiva1)
+                    </div>
+                </td>
+                <td>
+                    <div class="text-truncate d-inline-block" style="max-width: 200px;">
+                        @Html.DisplayFor(modelItem => item.ImgAggiuntiva2)
+                    </div>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InVetrina)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.IDArticolo }) |
+                    <!--se l'elemento è in vetrina mostro il bottone nascondi da vetrina, altrimenti aggiungi a vetrina-->
+                    @if (item.InVetrina)
+                    {
+                        using (Html.BeginForm("TogliDaVetrina", "Home", new { id = item.IDArticolo }, FormMethod.Post, new { @class = "d-inline" }))
+                        {
+                            <input type="submit" value="Nascondi da Vetrina" class="btn btn-sm btn-danger btn-outline-dark" />
+                        }
+                    }
+                    else
+                    {
+                        using (Html.BeginForm("AddToVetrina", "Home", new { id = item.IDArticolo }, FormMethod.Post, new { @class = "d-inline" }))
+                        {
+                            <input type="submit" value="Aggiungi a Vetrina" class="btn btn-sm btn-success btn-outline-dark" />
+                        }
+                    }
+                </td>
+            </tr>
+        }
+
+    </table>
+    </div>

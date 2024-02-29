@@ -1,5 +1,4 @@
-﻿// AGGIUNGI QUESTA LINEAAAAAAAHHHH !!! 
-
+﻿
 //********* Aggiungo [HttpPost] alle azioni per indicare che dovrebbero essere invocate
 //solo in risposta a una richiesta POST.
 
@@ -14,7 +13,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using U2S2E3.Models;
+using U2S2E3.Models; // AGGIUNGI QUESTA LINEAAAAAAAHHHH !!! 
 
 namespace U2S2E3.Controllers
 {
